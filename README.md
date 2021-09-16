@@ -1,14 +1,58 @@
-# Project
+# Azure Deployment What-If Action
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+GitHub Action that previews the effects of your Azure infrastructure changes before its deployment by running an [ARM template deployment what-if operation](https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/deploy-what-if?tabs=azure-powershell).
 
-As the maintainer of this project, please make a few updates:
+## When to use
 
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
+The action is particularly useful on Infrastructure as Code Continuous Integration (CI) workflows, where you can provide detailed information of how Azure resources will change if you deploy the ARM template. The action doesn't make any changes to existing resources.
+
+## Getting Started
+
+### Prerequisites
+
+If your GitHub Actions workflows are running on a [self-hosted runner](https://docs.github.com/en/actions/hosting-your-own-runners/about-self-hosted-runners):
+
+- [Azure CLI](https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/install#azure-cli) 2.20.0 or later installed
+
+### Example Usage
+
+#### **Preview changes with a parameters file**
+
+```yml
+steps:
+  - name: Preview changes
+    uses: Azure/deployment-what-if@v1.0.0
+    with:
+      subscription: '<subscription ID>'
+      resourceGroup: '<resource group name>'
+      templateFile: azuredeploy.json # main.bicep
+      parametersFile: parameters.json
+```
+
+#### **Preview changes with additional parameters**
+
+```yml
+steps:
+  - name: Preview changes
+    uses: Azure/deployment-what-if@v1.0.0
+    with:
+      subscription: '<subscription ID>'
+      resourceGroup: '<resource group name>'
+      templateFile: azuredeploy.json # main.bicep
+      additionalParameters: key1=value key2=value keyN=value
+```
+
+> Note: `parametersFile` and `additionalParameters` can be used together.
+
+### Inputs
+
+| Name | Description | Required |
+| --- | --- | --- |
+| `subscription` | Subscription ID | true |
+| `resourceGroup` | Resource group name | true |
+| `templateFile` | ARM template (`.json`) or Bicep (`.bicep`) file | true |
+| `parametersFile` | Parameters file for the ARM template or Bicep | false |
+| `additionalParameters` | Additional parameters to be applied on the ARM template or Bicep. Multiple parameters should be separated by spaces. | false |
 
 ## Contributing
 
