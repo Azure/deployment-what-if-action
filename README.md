@@ -20,6 +20,11 @@ If your GitHub Actions workflows are running on a [self-hosted runner](https://d
 
 ```yml
 steps:
+  - name: Azure Login
+    uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
   - name: Preview changes
     uses: Azure/deployment-what-if@v1.0.0
     with:
