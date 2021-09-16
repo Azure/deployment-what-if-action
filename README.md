@@ -10,7 +10,9 @@ The action is particularly useful on Infrastructure as Code Continuous Integrati
 
 ### Prerequisites
 
-If your GitHub Actions workflows are running on a [self-hosted runner](https://docs.github.com/en/actions/hosting-your-own-runners/about-self-hosted-runners):
+- Have your service principal credentials stored as [encrypted secrets](https://docs.github.com/en/actions/reference/encrypted-secrets) on GitHub.
+
+Additionally, if your GitHub Actions workflows are running on a [self-hosted runner](https://docs.github.com/en/actions/hosting-your-own-runners/about-self-hosted-runners):
 
 - [Azure CLI](https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/install#azure-cli) 2.20.0 or later installed
 
@@ -21,14 +23,14 @@ If your GitHub Actions workflows are running on a [self-hosted runner](https://d
 ```yml
 steps:
   - name: Azure Login
-    uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    uses: Azure/login@v1.1
+    with:
+      creds: '{"clientId":"${{ secrets.CLIENT_ID }}","clientSecret":"${{ secrets.CLIENT_SECRET }}","subscriptionId":"${{ secrets.SUBSCRIPTION_ID }}","tenantId":"${{ secrets.TENANT_ID }}"}'
 
   - name: Preview changes
     uses: Azure/deployment-what-if@v1.0.0
     with:
-      subscription: '<subscription ID>'
+      subscription: ${{ secrets.SUBSCRIPTION_ID }}
       resourceGroup: '<resource group name>'
       templateFile: azuredeploy.json # main.bicep
       parametersFile: parameters.json
@@ -39,14 +41,14 @@ steps:
 ```yml
 steps:
   - name: Azure Login
-    uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-        
+    uses: Azure/login@v1.1
+    with:
+      creds: '{"clientId":"${{ secrets.CLIENT_ID }}","clientSecret":"${{ secrets.CLIENT_SECRET }}","subscriptionId":"${{ secrets.SUBSCRIPTION_ID }}","tenantId":"${{ secrets.TENANT_ID }}"}'
+  
   - name: Preview changes
     uses: Azure/deployment-what-if@v1.0.0
     with:
-      subscription: '<subscription ID>'
+      subscription: ${{ secrets.SUBSCRIPTION_ID }}
       resourceGroup: '<resource group name>'
       templateFile: azuredeploy.json # main.bicep
       additionalParameters: key1=value key2=value keyN=value
