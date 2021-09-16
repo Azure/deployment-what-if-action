@@ -9,13 +9,13 @@ inputs:
     description: Resource group name
     required: true
   templateFile:
-    description: ARM template file
+    description: ARM template or Bicep file
     required: true
   parametersFile:
-    description: ARM template parameters file
+    description: Parameters file for the ARM template or Bicep
     required: false
   additionalParameters:
-    description: Additional parameters to be applied on the ARM template. Multiple parameters should be separated by spaces.
+    description: Additional parameters to be applied on the ARM template or Bicep. Multiple parameters should be separated by spaces.
     required: false
 
 runs:
@@ -38,7 +38,7 @@ runs:
         
         az deployment group what-if \
           --resource-group ${{ inputs.resourceGroup }} \
-          --subscription ${{ inputs.subscription }}  \
-          --template-file  ${{ inputs.templateFile }} \
+          --subscription ${{ inputs.subscription }} \
+          --template-file ${{ inputs.templateFile }} \
           $PARAMETERS
       shell: bash
