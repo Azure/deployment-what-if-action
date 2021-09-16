@@ -1,4 +1,4 @@
-name: azure-deployment-what-if
+name: deployment-what-if
 description: Preview Azure infrastructure changes before its deployment
 
 inputs:
