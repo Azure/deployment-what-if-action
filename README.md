@@ -28,7 +28,7 @@ steps:
       creds: '{"clientId":"${{ secrets.CLIENT_ID }}","clientSecret":"${{ secrets.CLIENT_SECRET }}","subscriptionId":"${{ secrets.SUBSCRIPTION_ID }}","tenantId":"${{ secrets.TENANT_ID }}"}'
 
   - name: Preview changes
-    uses: Azure/deployment-what-if@v1.0.0
+    uses: Azure/deployment-what-if-action@v1.0.0
     with:
       subscription: ${{ secrets.SUBSCRIPTION_ID }}
       resourceGroup: '<resource group name>'
