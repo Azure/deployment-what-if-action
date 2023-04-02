@@ -101,22 +101,22 @@ runs:
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "### Resources Created" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        created="$deployment" | grep "+.*\]$" | awk '{ gsub("+","- ", $1); print($1,$2) }' || echo 'None'
+        created="$deployment" | grep "+.*\]$" | awk '{ gsub("+","- ", $1); print($1,$2) }' && echo '' || echo 'None'
         echo "$created" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "### Resources Updated" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        updated="$deployment" | grep "^  ~.*\]$" | grep -v 'Modify' | awk '{ gsub("~","- ", $1); print($1,$2) }' || echo 'None'
+        updated="$deployment" | grep "^  ~.*\]$" | grep -v 'Modify' | awk '{ gsub("~","- ", $1); print($1,$2) }' && echo '' || echo 'None'
         echo "$updated" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "### Resources Deleted" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        deleted="$deployment" | egrep "^  -.*" | grep -v 'Delete' | awk '{ gsub("  -","- ", $1); print($1,$2) }' || echo 'None'
+        deleted="$deployment" | egrep "^  -.*" | grep -v 'Delete' | awk '{ gsub("  -","- ", $1); print($1,$2) }' && echo '' || echo 'None'
         echo "$deleted" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "### Resources Ignored" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        ignored="$deployment" | egrep "^  \*.*" | grep -v 'Ignore' | awk '{ gsub("^*","- ", $1); print($1,$2) }' || echo 'None'
+        ignored="$deployment" | egrep "^  \*.*" | grep -v 'Ignore' | awk '{ gsub("^*","- ", $1); print($1,$2) }' && echo '' || echo 'None'
         echo "$ignored" >> $GITHUB_STEP_SUMMARY
         
       shell: bash
