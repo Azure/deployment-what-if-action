@@ -53,25 +53,28 @@ runs:
           $PARAMETERS)"
         echo "$deployment"
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "## Azure What-If deployment" >> $GITHUB_STEP_SUMMARY
+        echo "# Azure What-If deployment" >> $GITHUB_STEP_SUMMARY
         echo "$deployment" | tail -1 >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "### Resources Created" >> $GITHUB_STEP_SUMMARY
+        echo "## Resources Created" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "$deployment" | grep "+.*\]$" | awk '{ gsub("+","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        created="$(echo "$deployment" | grep "+.*\]$" | awk '{ gsub("+","- ", $1); print($1,$2) }' | grep . && echo '' || echo 'None')"
+        echo "$created" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "### Resources Updated" >> $GITHUB_STEP_SUMMARY
+        echo "## Resources Updated" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "$deployment" | grep "^  ~.*\]$" | grep -v 'Modify' | awk '{ gsub("~","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        updated="$(echo "$deployment" | grep "^  ~.*\]$" | grep -v 'Modify' | awk '{ gsub("~","- ", $1); print($1,$2) }' | grep . && echo '' || echo 'None')"
+        echo "$updated" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "### Resources Deleted" >> $GITHUB_STEP_SUMMARY
+        echo "## Resources Deleted" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "$deployment" | egrep "^  -.*" | grep -v 'Delete' | awk '{ gsub("  -","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        deleted="$(echo "$deployment" | egrep "^  -.*" | grep -v 'Delete' | awk '{ gsub("  -","- ", $1); print($1,$2) }' | grep . && echo '' || echo 'None')"
+        echo "$deleted" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "### Resources Ignored" >> $GITHUB_STEP_SUMMARY
+        echo "## Resources Ignored" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "$deployment" | egrep "^  \*.*" | grep -v 'Ignore' | awk '{ gsub("^*","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
-
+        ignored="$(echo "$deployment" | egrep "^  \*.*" | grep -v 'Ignore' | awk '{ gsub("^*","- ", $1); print($1,$2) }' | grep . && echo '' || echo 'None')"
+        echo "$ignored" >> $GITHUB_STEP_SUMMARY
       shell: bash
       if: ${{ inputs.scope == 'resourceGroup' }}
     - run: |
@@ -96,29 +99,28 @@ runs:
           $PARAMETERS)"
         echo "$deployment"
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "## Azure What-If deployment" >> $GITHUB_STEP_SUMMARY
+        echo "# Azure What-If deployment" >> $GITHUB_STEP_SUMMARY
         echo "$deployment" | tail -1 >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "### Resources Created" >> $GITHUB_STEP_SUMMARY
+        echo "## Resources Created" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         created="$(echo "$deployment" | grep "+.*\]$" | awk '{ gsub("+","- ", $1); print($1,$2) }' | grep . && echo '' || echo 'None')"
         echo "$created" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "### Resources Updated" >> $GITHUB_STEP_SUMMARY
+        echo "## Resources Updated" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         updated="$(echo "$deployment" | grep "^  ~.*\]$" | grep -v 'Modify' | awk '{ gsub("~","- ", $1); print($1,$2) }' | grep . && echo '' || echo 'None')"
         echo "$updated" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "### Resources Deleted" >> $GITHUB_STEP_SUMMARY
+        echo "## Resources Deleted" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         deleted="$(echo "$deployment" | egrep "^  -.*" | grep -v 'Delete' | awk '{ gsub("  -","- ", $1); print($1,$2) }' | grep . && echo '' || echo 'None')"
         echo "$deleted" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "### Resources Ignored" >> $GITHUB_STEP_SUMMARY
+        echo "## Resources Ignored" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         ignored="$(echo "$deployment" | egrep "^  \*.*" | grep -v 'Ignore' | awk '{ gsub("^*","- ", $1); print($1,$2) }' | grep . && echo '' || echo 'None')"
         echo "$ignored" >> $GITHUB_STEP_SUMMARY
-        
       shell: bash
       if: ${{ inputs.scope == 'subscription' }}
     - run: |
@@ -143,24 +145,28 @@ runs:
           $PARAMETERS)"
         echo "$deployment"
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "## Azure What-If deployment" >> $GITHUB_STEP_SUMMARY
+        echo "# Azure What-If deployment" >> $GITHUB_STEP_SUMMARY
         echo "$deployment" | tail -1 >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "### Resources Created" >> $GITHUB_STEP_SUMMARY
+        echo "## Resources Created" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "$deployment" | grep "+.*\]$" | awk '{ gsub("+","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        created="$(echo "$deployment" | grep "+.*\]$" | awk '{ gsub("+","- ", $1); print($1,$2) }' | grep . && echo '' || echo 'None')"
+        echo "$created" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "### Resources Updated" >> $GITHUB_STEP_SUMMARY
+        echo "## Resources Updated" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "$deployment" | grep "^  ~.*\]$" | grep -v 'Modify' | awk '{ gsub("~","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        updated="$(echo "$deployment" | grep "^  ~.*\]$" | grep -v 'Modify' | awk '{ gsub("~","- ", $1); print($1,$2) }' | grep . && echo '' || echo 'None')"
+        echo "$updated" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "### Resources Deleted" >> $GITHUB_STEP_SUMMARY
+        echo "## Resources Deleted" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "$deployment" | egrep "^  -.*" | grep -v 'Delete' | awk '{ gsub("^-","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        deleted="$(echo "$deployment" | egrep "^  -.*" | grep -v 'Delete' | awk '{ gsub("  -","- ", $1); print($1,$2) }' | grep . && echo '' || echo 'None')"
+        echo "$deleted" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "### Resources Ignored" >> $GITHUB_STEP_SUMMARY
+        echo "## Resources Ignored" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "$deployment" | egrep "^  \*.*" | grep -v 'Ignore' | awk '{ gsub("^*","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        ignored="$(echo "$deployment" | egrep "^  \*.*" | grep -v 'Ignore' | awk '{ gsub("^*","- ", $1); print($1,$2) }' | grep . && echo '' || echo 'None')"
+        echo "$ignored" >> $GITHUB_STEP_SUMMARY
       shell: bash
       if: ${{ inputs.scope == 'managementGroup' }}
     - run: |
@@ -184,23 +190,27 @@ runs:
           $PARAMETERS)"
         echo "$deployment"
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "## Azure What-If deployment" >> $GITHUB_STEP_SUMMARY
+        echo "# Azure What-If deployment" >> $GITHUB_STEP_SUMMARY
         echo "$deployment" | tail -1 >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "### Resources Created" >> $GITHUB_STEP_SUMMARY
+        echo "## Resources Created" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "$deployment" | grep "+.*\]$" | awk '{ gsub("+","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        created="$(echo "$deployment" | grep "+.*\]$" | awk '{ gsub("+","- ", $1); print($1,$2) }' | grep . && echo '' || echo 'None')"
+        echo "$created" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "### Resources Updated" >> $GITHUB_STEP_SUMMARY
+        echo "## Resources Updated" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "$deployment" | grep "^  ~.*\]$" | grep -v 'Modify' | awk '{ gsub("~","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        updated="$(echo "$deployment" | grep "^  ~.*\]$" | grep -v 'Modify' | awk '{ gsub("~","- ", $1); print($1,$2) }' | grep . && echo '' || echo 'None')"
+        echo "$updated" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "### Resources Deleted" >> $GITHUB_STEP_SUMMARY
+        echo "## Resources Deleted" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "$deployment" | egrep "^  -.*" | grep -v 'Delete' | awk '{ gsub("^-","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        deleted="$(echo "$deployment" | egrep "^  -.*" | grep -v 'Delete' | awk '{ gsub("  -","- ", $1); print($1,$2) }' | grep . && echo '' || echo 'None')"
+        echo "$deleted" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "### Resources Ignored" >> $GITHUB_STEP_SUMMARY
+        echo "## Resources Ignored" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "$deployment" | egrep "^  \*.*" | grep -v 'Ignore' | awk '{ gsub("^*","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        ignored="$(echo "$deployment" | egrep "^  \*.*" | grep -v 'Ignore' | awk '{ gsub("^*","- ", $1); print($1,$2) }' | grep . && echo '' || echo 'None')"
+        echo "$ignored" >> $GITHUB_STEP_SUMMARY
       shell: bash
       if: ${{ inputs.scope == 'tenant' }}
