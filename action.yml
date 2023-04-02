@@ -109,7 +109,7 @@ runs:
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "### Resources Deleted" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "$deployment" | grep "^  -.*" | grep -v 'Delete' | awk '{ gsub("-","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        echo "$deployment" | grep "^  \-.*" | grep -v 'Delete' | awk '{ gsub("^-","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "### Resources Ignored" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
