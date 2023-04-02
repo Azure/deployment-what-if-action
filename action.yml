@@ -6,13 +6,13 @@ inputs:
     description: Subscription ID
     required: true
   resourceGroup:
-    description: Resource group name
+    description: Resource group name. Required when scope is 'resourceGroup'.
     required: false
   managementGroupId:
-    description: Management group ID
+    description: Management group ID. Required when scope is 'managementGroup'.
     required: false
   scope:
-    description: The scope of the deployment. Valid scopes are 'subscription', 'resourceGroup', and 'managementGroup'. The default is 'resourceGroup'.
+    description: The scope of the deployment. Valid scopes are 'subscription', 'resourceGroup', 'managementGroup' and 'tenant'. The default is 'resourceGroup'.
     required: false
     default: 'resourceGroup'
   templateFile:
@@ -22,7 +22,7 @@ inputs:
     description: Parameters file for the ARM template or Bicep
     required: false
   region:
-    description: Region for all resources. Required when scope is 'subscription' or 'managementGroup'.
+    description: Region for all resources. Required when scope is 'subscription', 'managementGroup' or 'tenant'.
     required: false
   additionalParameters:
     description: Additional parameters to be applied on the ARM template or Bicep. Multiple parameters should be separated by spaces.
@@ -92,9 +92,29 @@ runs:
         
         az deployment mg what-if \
           --management-group-id ${{ inputs.managementGroupId }} \
-          --subscription ${{ inputs.subscriptionId }} \
           --template-file ${{ inputs.templateFile }} \
           --location ${{ inputs.region }} \
           $PARAMETERS
       shell: bash
       if: ${{ inputs.scope == 'managementGroup' }}
+    - run: |
+        PARAMETERS=""
+
+        if [[ ! -z "${{ inputs.parametersFile }}" || ! -z "${{ inputs.additionalParameters }}" ]]; then
+          PARAMETERS="--parameters"
+
+          if [[ ! -z "${{ inputs.parametersFile }}" ]]; then
+            PARAMETERS="$PARAMETERS @${{ inputs.parametersFile }}"
+          fi
+
+          if [[ ! -z "${{ inputs.additionalParameters }}" ]]; then
+            PARAMETERS="$PARAMETERS ${{ inputs.additionalParameters }}"
+          fi
+        fi
+        
+        az deployment tenant what-if \
+          --template-file ${{ inputs.templateFile }} \
+          --location ${{ inputs.region }} \
+          $PARAMETERS
+      shell: bash
+      if: ${{ inputs.scope == 'tenant' }}
