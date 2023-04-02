@@ -36,7 +36,7 @@ steps:
       parametersFile: parameters.json
 ```
 
-#### **Preview changes with additional parameters**
+#### **Preview changes with additional parameters at resource group scope**
 
 ```yml
 steps:
@@ -54,6 +54,26 @@ steps:
       additionalParameters: key1=value key2=value keyN=value
 ```
 
+#### **Preview changes at subscription scope in the westeurope region**
+
+```yml
+steps:
+  - name: Azure Login
+    uses: Azure/login@v1.1
+    with:
+      creds: '{"clientId":"${{ secrets.CLIENT_ID }}","clientSecret":"${{ secrets.CLIENT_SECRET }}","subscriptionId":"${{ secrets.SUBSCRIPTION_ID }}","tenantId":"${{ secrets.TENANT_ID }}"}'
+  
+  - name: Preview changes
+    uses: Azure/deployment-what-if-action@v1.0.0
+    with:
+      subscription: ${{ secrets.SUBSCRIPTION_ID }}
+      scope: 'subscription'
+      region: 'westeurope'
+      templateFile: main.bicep
+
+```
+
+
 > Note: `parametersFile` and `additionalParameters` can be used together.
 
 ### Inputs
@@ -61,7 +81,10 @@ steps:
 | Name | Description | Required |
 | --- | --- | --- |
 | `subscription` | Subscription ID | true |
-| `resourceGroup` | Resource group name | true |
+| `resourceGroup` | Resource group name, required when `scope` is `resourceGroup` | false |
+| `scope` | Scope of the deployment. Possible values are `resourceGroup`, `subscription` and `managementGroup`. Default: `resourceGroup`| false |
+| `region` | Region where the resources will be deployed. Required when `scope` is `subscription` or `managementGroup`| false |
+| `managementGroupId` | Management group ID, required when `scope` is `managementGroup` | false |
 | `templateFile` | ARM template (`.json`) or Bicep (`.bicep`) file | true |
 | `parametersFile` | Parameters file for the ARM template or Bicep | false |
 | `additionalParameters` | Additional parameters to be applied on the ARM template or Bicep. Multiple parameters should be separated by spaces. | false |

@@ -2,7 +2,7 @@ name: deployment-what-if
 description: Preview Azure infrastructure changes before its deployment
 
 inputs:
-  subscriptionId:
+  subscription:
     description: Subscription ID
     required: true
   resourceGroup:
