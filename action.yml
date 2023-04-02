@@ -66,11 +66,11 @@ runs:
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "### Resources Deleted" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "$deployment" | grep "^  -.*" | grep -v 'Delete' | awk '{ gsub("-","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        echo "$deployment" | egrep "^  -.*" | grep -v 'Delete' | awk '{ gsub("^-","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "### Resources Ignored" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "$deployment" | grep "^  \*.*" | grep -v 'Ignore' | awk '{ gsub("^*","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        echo "$deployment" | egrep "^  \*.*" | grep -v 'Ignore' | awk '{ gsub("^*","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
 
       shell: bash
       if: ${{ inputs.scope == 'resourceGroup' }}
@@ -109,11 +109,11 @@ runs:
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "### Resources Deleted" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "$deployment" | grep "^  \-.*" | grep -v 'Delete' | awk '{ gsub("^-","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        echo "$deployment" | egrep "^  -.*" | grep -v 'Delete' | awk '{ gsub("^-","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "### Resources Ignored" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "$deployment" | grep "^  \*.*" | grep -v 'Ignore' | awk '{ gsub("^*","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        echo "$deployment" | egrep "^  \*.*" | grep -v 'Ignore' | awk '{ gsub("^*","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
 
       shell: bash
       if: ${{ inputs.scope == 'subscription' }}
@@ -152,11 +152,11 @@ runs:
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "### Resources Deleted" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "$deployment" | grep "^  -.*" | grep -v 'Delete' | awk '{ gsub("-","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        echo "$deployment" | egrep "^  -.*" | grep -v 'Delete' | awk '{ gsub("^-","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "### Resources Ignored" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "$deployment" | grep "^  \*.*" | grep -v 'Ignore' | awk '{ gsub("^*","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        echo "$deployment" | egrep "^  \*.*" | grep -v 'Ignore' | awk '{ gsub("^*","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
       shell: bash
       if: ${{ inputs.scope == 'managementGroup' }}
     - run: |
@@ -193,10 +193,10 @@ runs:
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "### Resources Deleted" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "$deployment" | grep "^  -.*" | grep -v 'Delete' | awk '{ gsub("-","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        echo "$deployment" | egrep "^  -.*" | grep -v 'Delete' | awk '{ gsub("^-","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "### Resources Ignored" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "$deployment" | grep "^  \*.*" | grep -v 'Ignore' | awk '{ gsub("^*","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        echo "$deployment" | egrep "^  \*.*" | grep -v 'Ignore' | awk '{ gsub("^*","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
       shell: bash
       if: ${{ inputs.scope == 'tenant' }}
