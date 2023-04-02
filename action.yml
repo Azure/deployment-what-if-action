@@ -48,7 +48,7 @@ runs:
         
         deployment="$(az deployment group what-if \
           --resource-group ${{ inputs.resourceGroup }} \
-          --subscription ${{ inputs.subscriptionId }} \
+          --subscription ${{ inputs.subscription }} \
           --template-file ${{ inputs.templateFile }} \
           $PARAMETERS)"
         echo "$deployment"
@@ -91,7 +91,7 @@ runs:
         fi
         
         deployment="$(az deployment sub what-if \
-          --subscription ${{ inputs.subscriptionId }} \
+          --subscription ${{ inputs.subscription }} \
           --template-file ${{ inputs.templateFile }} \
           --location ${{ inputs.region }} \
           $PARAMETERS)"
