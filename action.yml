@@ -2,16 +2,16 @@ name: deployment-what-if
 description: Preview Azure infrastructure changes before its deployment
 
 inputs:
-  subscription:
+  subscriptionId:
     description: Subscription ID
     required: true
   resourceGroup:
     description: Resource group name
     required: false
-  managementGroup:
+  managementGroupId:
     description: Management group ID
     required: false
-  targetScope:
+  scope:
     description: The scope of the deployment. Valid scopes are 'subscription', 'resourceGroup', and 'managementGroup'. The default is 'resourceGroup'.
     required: false
     default: 'resourceGroup'
@@ -21,8 +21,8 @@ inputs:
   parametersFile:
     description: Parameters file for the ARM template or Bicep
     required: false
-  location:
-    description: Location for all resources. Required when targetScope is 'subscription' or 'managementGroup'.
+  region:
+    description: Region for all resources. Required when scope is 'subscription' or 'managementGroup'.
     required: false
   additionalParameters:
     description: Additional parameters to be applied on the ARM template or Bicep. Multiple parameters should be separated by spaces.
@@ -48,11 +48,11 @@ runs:
         
         az deployment group what-if \
           --resource-group ${{ inputs.resourceGroup }} \
-          --subscription ${{ inputs.subscription }} \
+          --subscription ${{ inputs.subscriptionId }} \
           --template-file ${{ inputs.templateFile }} \
           $PARAMETERS
       shell: bash
-      if: ${{ inputs.targetScope == 'resourceGroup' }}
+      if: ${{ inputs.scope == 'resourceGroup' }}
     - run: |
         PARAMETERS=""
 
@@ -69,12 +69,12 @@ runs:
         fi
         
         az deployment sub what-if \
-          --subscription ${{ inputs.subscription }} \
+          --subscription ${{ inputs.subscriptionId }} \
           --template-file ${{ inputs.templateFile }} \
-          --location ${{ inputs.location }} \
+          --location ${{ inputs.region }} \
           $PARAMETERS
       shell: bash
-      if: ${{ inputs.targetScope == 'subscription' }}
+      if: ${{ inputs.scope == 'subscription' }}
     - run: |
         PARAMETERS=""
 
@@ -91,10 +91,10 @@ runs:
         fi
         
         az deployment mg what-if \
-          --management-group-id ${{ inputs.managementGroup }} \
-          --subscription ${{ inputs.subscription }} \
+          --management-group-id ${{ inputs.managementGroupId }} \
+          --subscription ${{ inputs.subscriptionId }} \
           --template-file ${{ inputs.templateFile }} \
-          --location ${{ inputs.location }} \
+          --location ${{ inputs.region }} \
           $PARAMETERS
       shell: bash
-      if: ${{ inputs.targetScope == 'managementGroup' }}
+      if: ${{ inputs.scope == 'managementGroup' }}
