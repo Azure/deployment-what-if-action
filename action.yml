@@ -46,11 +46,33 @@ runs:
           fi
         fi
         
-        az deployment group what-if \
+        deployment="$(az deployment group what-if \
           --resource-group ${{ inputs.resourceGroup }} \
           --subscription ${{ inputs.subscriptionId }} \
           --template-file ${{ inputs.templateFile }} \
-          $PARAMETERS
+          $PARAMETERS)"
+        echo "$deployment"
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "## Azure What-If deployment" >> $GITHUB_STEP_SUMMARY
+        echo "$deployment" | tail -1 >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Resources Created" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "$deployment" | grep "+.*\]$" | awk '{ gsub("+","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Resources Updated" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "$deployment" | grep "~.*\]$" | awk '{ gsub("~","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Resources Deleted" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "$deployment" | grep "-.*" | awk '{ gsub("-","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Resources Ignored" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "$deployment" | grep "^  \*.*" | awk '{ gsub("^*","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+
       shell: bash
       if: ${{ inputs.scope == 'resourceGroup' }}
     - run: |
@@ -68,11 +90,32 @@ runs:
           fi
         fi
         
-        az deployment sub what-if \
+        deployment="$(az deployment sub what-if \
           --subscription ${{ inputs.subscriptionId }} \
           --template-file ${{ inputs.templateFile }} \
           --location ${{ inputs.region }} \
-          $PARAMETERS
+          $PARAMETERS)"
+        echo "$deployment"
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "## Azure What-If deployment" >> $GITHUB_STEP_SUMMARY
+        echo "$deployment" | tail -1 >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Resources Created" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "$deployment" | grep "+.*\]$" | awk '{ gsub("+","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Resources Updated" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "$deployment" | grep "~.*\]$" | awk '{ gsub("~","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Resources Deleted" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "$deployment" | grep "-.*" | awk '{ gsub("-","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Resources Ignored" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "$deployment" | grep "^  \*.*" | awk '{ gsub("^*","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+
       shell: bash
       if: ${{ inputs.scope == 'subscription' }}
     - run: |
@@ -90,11 +133,31 @@ runs:
           fi
         fi
         
-        az deployment mg what-if \
+        deployment="$(az deployment mg what-if \
           --management-group-id ${{ inputs.managementGroupId }} \
           --template-file ${{ inputs.templateFile }} \
           --location ${{ inputs.region }} \
-          $PARAMETERS
+          $PARAMETERS)"
+        echo "$deployment"
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "## Azure What-If deployment" >> $GITHUB_STEP_SUMMARY
+        echo "$deployment" | tail -1 >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Resources Created" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "$deployment" | grep "+.*\]$" | awk '{ gsub("+","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Resources Updated" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "$deployment" | grep "~.*\]$" | awk '{ gsub("~","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Resources Deleted" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "$deployment" | grep "-.*" | awk '{ gsub("-","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Resources Ignored" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "$deployment" | grep "^  \*.*" | awk '{ gsub("^*","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
       shell: bash
       if: ${{ inputs.scope == 'managementGroup' }}
     - run: |
@@ -112,9 +175,28 @@ runs:
           fi
         fi
         
-        az deployment tenant what-if \
+        deployment="$(az deployment tenant what-if \
           --template-file ${{ inputs.templateFile }} \
           --location ${{ inputs.region }} \
-          $PARAMETERS
+          $PARAMETERS)"
+        echo "$deployment"
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "## Azure What-If deployment" >> $GITHUB_STEP_SUMMARY
+        echo "$deployment" | tail -1 >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Resources Created" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "$deployment" | grep "+.*\]$" | awk '{ gsub("+","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Resources Updated" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "$deployment" | grep "~.*\]$" | awk '{ gsub("~","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Resources Deleted" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "$deployment" | grep "-.*" | awk '{ gsub("-","- ", $1); print($1,$2) }'  >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Resources Ignored" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
       shell: bash
       if: ${{ inputs.scope == 'tenant' }}
