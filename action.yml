@@ -7,12 +7,22 @@ inputs:
     required: true
   resourceGroup:
     description: Resource group name
-    required: true
+    required: false
+  managementGroup:
+    description: Management group ID
+    required: false
+  targetScope:
+    description: The scope of the deployment. Valid scopes are 'subscription', 'resourceGroup', and 'managementGroup'. The default is 'resourceGroup'.
+    required: false
+    default: 'resourceGroup'
   templateFile:
     description: ARM template or Bicep file
     required: true
   parametersFile:
     description: Parameters file for the ARM template or Bicep
+    required: false
+  location:
+    description: Location for all resources. Required when targetScope is 'subscription' or 'managementGroup'.
     required: false
   additionalParameters:
     description: Additional parameters to be applied on the ARM template or Bicep. Multiple parameters should be separated by spaces.
@@ -42,3 +52,49 @@ runs:
           --template-file ${{ inputs.templateFile }} \
           $PARAMETERS
       shell: bash
+      if: ${{ inputs.targetScope == 'resourceGroup' }}
+    - run: |
+        PARAMETERS=""
+
+        if [[ ! -z "${{ inputs.parametersFile }}" || ! -z "${{ inputs.additionalParameters }}" ]]; then
+          PARAMETERS="--parameters"
+
+          if [[ ! -z "${{ inputs.parametersFile }}" ]]; then
+            PARAMETERS="$PARAMETERS @${{ inputs.parametersFile }}"
+          fi
+
+          if [[ ! -z "${{ inputs.additionalParameters }}" ]]; then
+            PARAMETERS="$PARAMETERS ${{ inputs.additionalParameters }}"
+          fi
+        fi
+        
+        az deployment sub what-if \
+          --subscription ${{ inputs.subscription }} \
+          --template-file ${{ inputs.templateFile }} \
+          --location ${{ inputs.location }} \
+          $PARAMETERS
+      shell: bash
+      if: ${{ inputs.targetScope == 'subscription' }}
+    - run: |
+        PARAMETERS=""
+
+        if [[ ! -z "${{ inputs.parametersFile }}" || ! -z "${{ inputs.additionalParameters }}" ]]; then
+          PARAMETERS="--parameters"
+
+          if [[ ! -z "${{ inputs.parametersFile }}" ]]; then
+            PARAMETERS="$PARAMETERS @${{ inputs.parametersFile }}"
+          fi
+
+          if [[ ! -z "${{ inputs.additionalParameters }}" ]]; then
+            PARAMETERS="$PARAMETERS ${{ inputs.additionalParameters }}"
+          fi
+        fi
+        
+        az deployment mg what-if \
+          --management-group-id ${{ inputs.managementGroup }} \
+          --subscription ${{ inputs.subscription }} \
+          --template-file ${{ inputs.templateFile }} \
+          --location ${{ inputs.location }} \
+          $PARAMETERS
+      shell: bash
+      if: ${{ inputs.targetScope == 'managementGroup' }}
